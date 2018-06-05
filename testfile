@@ -1,0 +1,54 @@
+
+import TrainedData
+import ExceptionNotSeen
+import trainer
+import tokenizer
+import classifier
+from trainer import Trainer
+from classifier import Classifier
+
+newsTrainer = Trainer(tokenizer)
+
+# You need to train the system passing each text one by one to the trainer module.
+newsSet =[
+    {'text': 'not to eat too much is not enough to lose weight', 'category': 'health'},
+    {'text': 'Russia is trying to invade Ukraine', 'category': 'politics'},
+    {'text': 'do not neglect exercise', 'category': 'health'},
+    {'text': 'Syria is the main issue, Obama says', 'category': 'politics'},
+    {'text': 'eat to lose weight', 'category': 'health'},
+    {'text': 'you should not eat much', 'category': 'health'},
+    {'text': 'iphone6 is available in india now', 'category': 'technology'},
+    {'text': 'New products,phone,new industries, and more jobs require continuous additions to knowledge of the laws of nature ... This essential new knowledge can be obtained only through basic scientific research.', 'category': 'technology'},
+    {'text': 'Smart meters can be hacked to cut power bills devices', 'category': 'technology'}
+]
+
+for news in newsSet:
+    newsTrainer.train(news['text'], news['category'])
+
+# When you have sufficient trained data, you are almost done and can start to use
+# a classifier.
+newsClassifier = Classifier(newsTrainer.data, tokenizer)
+####################################################
+# Now you have a classifier which can give a try to classifiy text of news whose
+# category is unknown, yet.
+unknownInstance = "Even if I eat too much, is not it possible to lose some weight"
+classification = newsClassifier.classify(unknownInstance)
+
+# the classification variable holds the possible categories sorted by 
+# their probablity value
+print classification
+
+###################################################
+unknownInstance = "Google unveils new Nexus TV, phone and tablet devices"
+classification = newsClassifier.classify(unknownInstance)
+
+# the classification variable holds the possible categories sorted by 
+# their probablity value
+print classification
+#######################################################
+unknownInstance = "Invasion is a dangerous issue"
+classification = newsClassifier.classify(unknownInstance)
+
+# the classification variable holds the possible categories sorted by 
+# their probablity value
+print classification
